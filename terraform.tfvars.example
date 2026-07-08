@@ -1,0 +1,4 @@
+project_name = "eft"
+environment  = "dev"
+my_ip        = "x.x.x.x/32"
+bucket_name  = "eft-auy1104-mdr-bucket-unico"

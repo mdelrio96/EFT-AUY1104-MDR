@@ -1,0 +1,21 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfplan.json
+crash.log
+crash.*.log
+
+# Variables locales (NUNCA subir secretos)
+*.tfvars
+!terraform.tfvars.example
+
+# Credenciales HCP Terraform (terraform login las guarda fuera del repo)
+.terraformrc
+credentials.tfrc.json
+
+# IDE
+.idea/
+.vscode/
