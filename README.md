@@ -32,7 +32,7 @@ El resultado es una solución que no solo despliega infraestructura, sino que in
 
 - `terraform plan` y `terraform apply` ejecutan sin errores y generan la infraestructura declarada (15 recursos).
 - El pipeline de CI aprueba formato, lint, análisis de seguridad estático, validación sintáctica y políticas OPA en cada Pull Request.
-- Los módulos son consumibles desde el repositorio raíz mediante referencia Git con tag de versión semántica (`?ref=v1.0.0`).
+- Los módulos son consumibles desde el repositorio raíz mediante referencia Git con tag de versión semántica (`?ref=v1.2.0`).
 - Los tres escenarios de gestión de estado finalizan con `No changes. Your infrastructure matches the configuration`, evidenciando sincronización total entre código, estado e infraestructura real, sin pérdida de recursos.
 
 ## Diseño de la Solución
@@ -54,7 +54,7 @@ La solución se organiza en dos repositorios principales:
 
 ### Interacciones
 
-El módulo raíz consume los módulos publicados en [EFT-Modulos-AUY1104-MDR](https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR) mediante *Git source* apuntando al repositorio de módulos con tag de versión semántica (`?ref=v1.0.0`). El módulo `ec2` depende de los outputs del módulo `vpc` (subnet pública y Security Group), lo que establece el grafo de dependencias que Terraform resuelve en el plan. Las variables sensibles o específicas del entorno (`my_ip`, `bucket_name`) se inyectan por `terraform.tfvars`, excluido del control de versiones mediante `.gitignore`, con una plantilla segura `terraform.tfvars.example` versionada en su lugar.
+El módulo raíz consume los módulos publicados en [EFT-Modulos-AUY1104-MDR](https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR) mediante *Git source* apuntando al repositorio de módulos con tag de versión semántica (`?ref=v1.2.0`). El módulo `ec2` depende de los outputs del módulo `vpc` (subnet pública y Security Group), lo que establece el grafo de dependencias que Terraform resuelve en el plan. Las variables sensibles o específicas del entorno (`my_ip`, `bucket_name`) se inyectan por `terraform.tfvars`, excluido del control de versiones mediante `.gitignore`, con una plantilla segura `terraform.tfvars.example` versionada en su lugar.
 
 ### Gestión remota del estado (HCP Terraform)
 
@@ -120,7 +120,7 @@ Sobre la infraestructura desplegada se resolvieron tres escenarios operativos:
 │  │ EFT-AUY1104-MDR      │  Git   │ EFT-Modulos-AUY1104-MDR   │ │
 │  │  main.tf / vars /    │ source │  modules/vpc              │ │
 │  │  outputs / policies  │───────▶│  modules/ec2              │ │
-│  │  CI: iac-pr.yml      │ @v1.0.0│  modules/s3               │ │
+│  │  CI: iac-pr.yml      │ @v1.2.0│  modules/s3               │ │
 │  │  release-please      │        │  (semver + changelog)     │ │
 │  └──────────┬───────────┘        └──────────────────────────┘ │
 └─────────────┼─────────────────────────────────────────────────┘
