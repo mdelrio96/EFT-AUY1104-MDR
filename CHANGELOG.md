@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/mdelrio96/EFT-AUY1104-MDR/compare/v1.2.0...v1.3.0) (2026-07-08)
+
+
+### Features
+
+* módulo raíz con backend HCP Terraform y consumo de módulos vpc/ec2/s3 (ref v1.2.0) ([b9b3bca](https://github.com/mdelrio96/EFT-AUY1104-MDR/commit/b9b3bca34e6dafb85dd7f5f9a2a854104b78a29c))
+
 ## [1.2.0](https://github.com/mdelrio96/EFT-AUY1104-MDR/compare/v1.1.0...v1.2.0) (2026-07-08)
 
 
