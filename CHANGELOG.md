@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/mdelrio96/EFT-AUY1104-MDR/compare/v1.1.0...v1.2.0) (2026-07-08)
+
+
+### Features
+
+* módulo raíz con backend HCP Terraform y consumo de módulos vpc/ec2/s3 ([f84fa46](https://github.com/mdelrio96/EFT-AUY1104-MDR/commit/f84fa46ea5abd0c3e714461af6d0dac785da048b))
+* políticas OPA deny_public_ssh y only_t2_micro con pruebas ([a83f469](https://github.com/mdelrio96/EFT-AUY1104-MDR/commit/a83f4693197c31abc37e922c3cd436ca5700ede9))
+
 ## [1.1.0](https://github.com/mdelrio96/EFT-AUY1104-MDR/compare/v1.0.0...v1.1.0) (2026-07-08)
 
 
