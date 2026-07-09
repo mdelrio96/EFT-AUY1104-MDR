@@ -137,6 +137,99 @@ Sobre la infraestructura desplegada se resolvieron tres escenarios operativos:
 └───────────────────────────────────────────────────────────────┘
 ```
 
+## Evidencia de Despliegue
+
+La infraestructura fue desplegada de forma exitosa en AWS Academy Learner Lab (`us-east-1`), con el estado gestionado en el workspace remoto de HCP Terraform.
+
+### `terraform init`
+
+La inicialización descargó los tres módulos desde `EFT-Modulos-AUY1104-MDR` en su versión publicada (`?ref=v1.2.0`), instaló el provider `hashicorp/aws` (`v6.54.0`, dentro del rango `>= 6.0.0, ~> 6.0, < 7.0.0`) y conectó exitosamente con HCP Terraform:
+
+```
+Initializing modules...
+Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR.git?ref=v1.2.0 for s3...
+Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR.git?ref=v1.2.0 for vpc...
+Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR.git?ref=v1.2.0 for ec2...
+
+Initializing HCP Terraform...
+Terraform has created a lock file .terraform.lock.hcl...
+
+HCP Terraform has been successfully initialized!
+```
+
+![Salida de terraform init](evidencias/01-terraform-init.png)
+
+La autenticación (`terraform login`) generó y almacenó el token de API contra `app.terraform.io`, confirmando el usuario `mdelrio96`.
+
+![Autenticación con HCP Terraform](evidencias/02-hcp-terraform-login.png)
+
+### `terraform plan`
+
+El plan proyectó la creación completa de la infraestructura sin cambios ni destrucciones:
+
+```
+Plan: 15 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + bucket_name          = "eft-auy1104-mdr-bucket-unico"
+  + instance_id          = (known after apply)
+  + instance_ip          = (known after apply)
+  + private_subnet_ids   = [(known after apply) x3]
+  + public_subnet_ids    = [(known after apply) x3]
+  + ssh_security_group_id = (known after apply)
+  + vpc_id                = (known after apply)
+```
+
+![Salida de terraform plan](evidencias/03-terraform-plan.png)
+
+### `terraform apply`
+
+```
+Apply complete! Resources: 15 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+bucket_name = "eft-auy1104-mdr-bucket-unico"
+instance_id = "i-0543a7dbcf4d9bbcd"
+instance_ip = "54.157.1.162"
+private_subnet_ids = [
+  "subnet-0073b4246d21ff14b",
+  "subnet-0b56eab625f24b953",
+  "subnet-0f1dea3e4bb9e97f9",
+]
+public_subnet_ids = [
+  "subnet-0fbfb6035f57211ee",
+  "subnet-0235f4dc3ac79d14c",
+  "subnet-0f0fb8facc93cca13",
+]
+ssh_security_group_id = "sg-05de7da03b8e5cc6a"
+vpc_id = "vpc-093d8bb1f2c27c9c2"
+```
+
+![Salida de terraform apply con outputs](evidencias/05-terraform-apply-outputs.png)
+
+### Verificación en HCP Terraform
+
+El workspace `EFT-AUY1104-Mdelrio` (organización `mdelrio-duoc`) confirma el estado sincronizado:
+
+- **Execution mode:** Local.
+- **Resources:** 15, distribuidos en los módulos `vpc` (subnets públicas/privadas, Internet Gateway, tabla de rutas, Security Group), `ec2` (instancia) y `s3` (bucket).
+- **Terraform version:** `v1.15.7`.
+- Nueva versión de estado (`New state`) registrada tras el `apply`, disparada por el usuario `mdelrio96` desde Terraform CLI.
+
+![Resumen del workspace en HCP Terraform](evidencias/04-hcp-workspace-overview.png)
+![Detalle de la versión de estado en HCP Terraform](evidencias/06-hcp-state-detalle.png)
+
+### Verificación en la consola de AWS
+
+- **EC2:** instancia `EFT-eft-ec2` (`i-0543a7dbcf4d9bbcd`), tipo `t2.micro`, en ejecución en `us-east-1a`, con IP pública `54.157.1.162`, coincidente con el output `instance_ip`.
+- **S3:** bucket `eft-auy1104-mdr-bucket-unico` visible en la región `us-east-1`, coincidente con el output `bucket_name`.
+- **VPC:** las 6 subnets propias del despliegue (`EFT-eft-public-1/2/3` y `EFT-eft-private-1/2/3`, CIDR `10.1.0.0/16`) visibles junto a las subnets `172.31.0.0/16` por defecto del Learner Lab, confirmando que la solución no interfiere con recursos preexistentes del entorno.
+
+![Instancia EC2 en ejecución](evidencias/07-aws-ec2-consola.png)
+![Bucket S3 creado](evidencias/08-aws-s3-consola.png)
+![Subnets de la VPC desplegada](evidencias/09-aws-vpc-subredes.png)
+
 ## Conclusiones
 
 La solución desarrollada aborda de forma integral los desafíos planteados en las tres evaluaciones parciales. La modularización (Parcial 2) transformó un código monolítico (Parcial 1) en componentes reutilizables e integrables en distintos entornos, con contratos claros de variables y outputs. La documentación por módulo, con ejemplos de uso y changelogs generados automáticamente, reduce la barrera de adopción y cumple los requisitos de mantenibilidad exigidos.
