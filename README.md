@@ -110,32 +110,9 @@ Sobre la infraestructura desplegada se resolvieron tres escenarios operativos:
 
 ## Diagrama de la Arquitectura
 
-*(Pendiente: diagrama visual a generar en eraser.io a partir del código ya preparado; el siguiente esquema se mantiene como referencia.)*
+El siguiente diagrama representa la relación entre los repositorios de GitHub, HCP Terraform, el operador y los recursos desplegados en AWS Learner Lab:
 
-```
-┌───────────────────────────────────────────────────────────────┐
-│ GitHub — organización AUY1105-II                              │
-│                                                               │
-│  ┌──────────────────────┐        ┌──────────────────────────┐ │
-│  │ EFT-AUY1104-MDR      │  Git   │ EFT-Modulos-AUY1104-MDR   │ │
-│  │  main.tf / vars /    │ source │  modules/vpc              │ │
-│  │  outputs / policies  │───────▶│  modules/ec2              │ │
-│  │  CI: iac-pr.yml      │ @v1.2.0│  modules/s3               │ │
-│  │  release-please      │        │  (semver + changelog)     │ │
-│  └──────────┬───────────┘        └──────────────────────────┘ │
-└─────────────┼─────────────────────────────────────────────────┘
-              │ terraform apply
-              ▼
-┌───────────────────────────────────────────────────────────────┐
-│ AWS (us-east-1) — Learner Lab                                 │
-│  ┌─────────────────────────────────────────────┐              │
-│  │ VPC                                          │  ┌────────┐ │
-│  │  subnets públicas (3) ── IGW ── route table  │  │ S3     │ │
-│  │  subnets privadas (3)                        │  │ bucket │ │
-│  │  SG SSH ── EC2 t2.micro (subnet pública)     │  └────────┘ │
-│  └─────────────────────────────────────────────┘              │
-└───────────────────────────────────────────────────────────────┘
-```
+![Diagrama de arquitectura de la solución](evidencias/10-diagrama-arquitectura.png)
 
 ## Evidencia de Despliegue
 
