@@ -1,4 +1,4 @@
-# EFT-AUY1104-MDR
+# EFT-AUY1105-MDR
 
 Examen Final Transversal — AUY1105 Infraestructura como Código II (Duoc UC). Consolidado de las Evaluaciones Parciales 1, 2 y 3.
 
@@ -43,8 +43,8 @@ La solución se organiza en dos repositorios principales:
 
 | Repositorio | Rol |
 |---|---|
-| `EFT-AUY1104-MDR` (raíz) | Módulo raíz que orquesta la infraestructura completa: invoca los módulos, define variables de alto nivel, expone outputs y aloja el pipeline de CI y las políticas OPA. |
-| `EFT-Modulos-AUY1104-MDR` | Repositorio de módulos reutilizables: `vpc`, `ec2` y `s3`, cada uno con `main.tf`, `variables.tf`, `outputs.tf`, `versions.tf` y `README.md` con ejemplos de uso y documentación de variables y outputs. |
+| `EFT-AUY1105-MDR` (raíz) | Módulo raíz que orquesta la infraestructura completa: invoca los módulos, define variables de alto nivel, expone outputs y aloja el pipeline de CI y las políticas OPA. |
+| `EFT-Modulos-AUY1105-MDR` | Repositorio de módulos reutilizables: `vpc`, `ec2` y `s3`, cada uno con `main.tf`, `variables.tf`, `outputs.tf`, `versions.tf` y `README.md` con ejemplos de uso y documentación de variables y outputs. |
 
 **Módulo de redes (`vpc`):** VPC con 3 subnets públicas y 3 privadas en distintas AZ, Internet Gateway, tabla de rutas pública con sus asociaciones y Security Group SSH restringido a un CIDR autorizado. Outputs: `vpc_id`, `subnet_ids`.
 
@@ -54,14 +54,14 @@ La solución se organiza en dos repositorios principales:
 
 ### Interacciones
 
-El módulo raíz consume los módulos publicados en [EFT-Modulos-AUY1104-MDR](https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR) mediante *Git source* apuntando al repositorio de módulos con tag de versión semántica (`?ref=v1.2.0`). El módulo `ec2` depende de los outputs del módulo `vpc` (subnet pública y Security Group), lo que establece el grafo de dependencias que Terraform resuelve en el plan. Las variables sensibles o específicas del entorno (`my_ip`, `bucket_name`) se inyectan por `terraform.tfvars`, excluido del control de versiones mediante `.gitignore`, con una plantilla segura `terraform.tfvars.example` versionada en su lugar.
+El módulo raíz consume los módulos publicados en [EFT-Modulos-AUY1105-MDR](https://github.com/mdelrio96/EFT-Modulos-AUY1105-MDR) mediante *Git source* apuntando al repositorio de módulos con tag de versión semántica (`?ref=v1.2.0`). El módulo `ec2` depende de los outputs del módulo `vpc` (subnet pública y Security Group), lo que establece el grafo de dependencias que Terraform resuelve en el plan. Las variables sensibles o específicas del entorno (`my_ip`, `bucket_name`) se inyectan por `terraform.tfvars`, excluido del control de versiones mediante `.gitignore`, con una plantilla segura `terraform.tfvars.example` versionada en su lugar.
 
 ### Gestión remota del estado (HCP Terraform)
 
 El módulo raíz incorpora un bloque `cloud` que delega el almacenamiento del estado en HCP Terraform:
 
 - **Organización:** `mdelrio-duoc`
-- **Workspace:** `EFT-AUY1104-Mdelrio`
+- **Workspace:** `EFT-AUY1105-Mdelrio`
 
 Con ello, el archivo de estado deja de residir en el equipo local: queda centralizado, versionado y protegido con bloqueo automático ante operaciones concurrentes, lo que elimina el riesgo de pérdida del `terraform.tfstate` abordado en el primer escenario del Parcial 3. El workspace opera en **modo de ejecución Local**: los `plan`/`apply` se ejecutan en la máquina del operador con las credenciales temporales del Learner Lab, y solo el estado se almacena y versiona en HCP Terraform. Requiere autenticación previa con `terraform login`.
 
@@ -120,13 +120,13 @@ La infraestructura fue desplegada de forma exitosa en AWS Academy Learner Lab (`
 
 ### `terraform init`
 
-La inicialización descargó los tres módulos desde `EFT-Modulos-AUY1104-MDR` en su versión publicada (`?ref=v1.2.0`), instaló el provider `hashicorp/aws` (`v6.54.0`, dentro del rango `>= 6.0.0, ~> 6.0, < 7.0.0`) y conectó exitosamente con HCP Terraform:
+La inicialización descargó los tres módulos desde `EFT-Modulos-AUY1105-MDR` en su versión publicada (`?ref=v1.2.0`), instaló el provider `hashicorp/aws` (`v6.54.0`, dentro del rango `>= 6.0.0, ~> 6.0, < 7.0.0`) y conectó exitosamente con HCP Terraform:
 
 ```
 Initializing modules...
-Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR.git?ref=v1.2.0 for s3...
-Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR.git?ref=v1.2.0 for vpc...
-Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR.git?ref=v1.2.0 for ec2...
+Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git?ref=v1.2.0 for s3...
+Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git?ref=v1.2.0 for vpc...
+Downloading git::https://github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git?ref=v1.2.0 for ec2...
 
 Initializing HCP Terraform...
 Terraform has created a lock file .terraform.lock.hcl...
@@ -187,7 +187,7 @@ vpc_id = "vpc-093d8bb1f2c27c9c2"
 
 ### Verificación en HCP Terraform
 
-El workspace `EFT-AUY1104-Mdelrio` (organización `mdelrio-duoc`) confirma el estado sincronizado:
+El workspace `EFT-AUY1105-Mdelrio` (organización `mdelrio-duoc`) confirma el estado sincronizado:
 
 - **Execution mode:** Local.
 - **Resources:** 15, distribuidos en los módulos `vpc` (subnets públicas/privadas, Internet Gateway, tabla de rutas, Security Group), `ec2` (instancia) y `s3` (bucket).
@@ -217,6 +217,6 @@ Finalmente, los escenarios de gestión de estado (Parcial 3) demostraron que la 
 
 ## Anexos
 
-- **GitHub Repository (raíz):** https://github.com/mdelrio96/EFT-AUY1104-MDR
-- **GitHub Repository (módulos):** https://github.com/mdelrio96/EFT-Modulos-AUY1104-MDR
-- **Terraform (HCP Terraform):** organización `mdelrio-duoc`, workspace `EFT-AUY1104-Mdelrio` — https://app.terraform.io/app/mdelrio-duoc/workspaces/EFT-AUY1104-Mdelrio
+- **GitHub Repository (raíz):** https://github.com/mdelrio96/EFT-AUY1105-MDR
+- **GitHub Repository (módulos):** https://github.com/mdelrio96/EFT-Modulos-AUY1105-MDR
+- **Terraform (HCP Terraform):** organización `mdelrio-duoc`, workspace `EFT-AUY1105-Mdelrio` — https://app.terraform.io/app/mdelrio-duoc/workspaces/EFT-AUY1105-Mdelrio

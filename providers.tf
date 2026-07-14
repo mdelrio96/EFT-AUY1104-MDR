@@ -5,7 +5,7 @@ terraform {
     organization = "mdelrio-duoc"
 
     workspaces {
-      name = "EFT-AUY1104-Mdelrio"
+      name = "EFT-AUY1105-Mdelrio"
     }
   }
 
