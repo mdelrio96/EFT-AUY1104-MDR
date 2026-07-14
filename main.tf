@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "git::https://github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git//modules/vpc?ref=v1.2.0"
+  source = "git::ssh://git@github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git//modules/vpc?ref=v1.2.0"
 
   project_name     = var.project_name
   environment      = var.environment
@@ -7,7 +7,7 @@ module "vpc" {
 }
 
 module "ec2" {
-  source = "git::https://github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git//modules/ec2?ref=v1.2.0"
+  source = "git::ssh://git@github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git//modules/ec2?ref=v1.2.0"
 
   project_name       = var.project_name
   environment        = var.environment
@@ -16,7 +16,7 @@ module "ec2" {
 }
 
 module "s3" {
-  source = "git::https://github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git//modules/s3?ref=v1.2.0"
+  source = "git::ssh://git@github.com/mdelrio96/EFT-Modulos-AUY1105-MDR.git//modules/s3?ref=v1.2.0"
 
   bucket_name = var.bucket_name
   environment = var.environment
