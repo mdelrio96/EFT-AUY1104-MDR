@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/mdelrio96/EFT-AUY1105-MDR/compare/v1.3.0...v1.3.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* usa ssh en el git source de los modulos ([044fbd7](https://github.com/mdelrio96/EFT-AUY1105-MDR/commit/044fbd7934180ef334114874eca8f3c5419969e7))
+
 ## [1.3.0](https://github.com/mdelrio96/EFT-AUY1105-MDR/compare/v1.2.0...v1.3.0) (2026-07-08)
 
 
